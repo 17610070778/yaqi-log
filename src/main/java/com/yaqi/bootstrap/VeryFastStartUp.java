@@ -20,8 +20,7 @@ import static jdk.internal.org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
  * @since 2022/4/21 23:21
  */
 public class VeryFastStartUp implements ClassFileTransformer {
-    public VeryFastStartUp() {
-    }
+
 
     public static void premain(String options, Instrumentation ins) {
         ins.addTransformer(new VeryFastStartUp());

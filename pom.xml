@@ -8,20 +8,16 @@
     <artifactId>veryfast</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
-
     <dependencies>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
             <version>5.0.4</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>5.1.6.RELEASE</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -37,6 +33,7 @@
                         <!--自动添加META-INF/MANIFEST.MF -->
                         <manifest>
                             <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
                             <Premain-Class>com.yaqi.bootstrap.VeryFastStartUp</Premain-Class>

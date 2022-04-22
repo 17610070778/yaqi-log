@@ -60,7 +60,7 @@ public class VeryFastStartUp implements ClassFileTransformer {
             }, ClassReader.EXPAND_FRAMES);
             byte[] data = classWriter.toByteArray();
             return data;
-        } else if (isSequenceTool(className)) {
+        } else if (Config.isIntercept(className)) {
             ClassReader classReader = new ClassReader(classfileBuffer);
             ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_FRAMES);
             classReader.accept(new ClassVisitor(ASM5, classWriter) {
@@ -91,9 +91,5 @@ public class VeryFastStartUp implements ClassFileTransformer {
 
     public static boolean isBeanDefinition(String className) {
         return className.equals("org/springframework/beans/factory/support/AbstractBeanDefinition");
-    }
-
-    public static boolean isSequenceTool(String className) {
-        return className.equals("com/hsjry/lang/sequence/SequenceTool");
     }
 }

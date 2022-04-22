@@ -21,9 +21,13 @@ import java.util.jar.JarFile;
  * @since 2022/4/21 23:20
  */
 public class Config {
-    private static ArrayList<String> notLazyBeans = new ArrayList();
+    private static ArrayList<String> config = new ArrayList();
 
     public Config() {
+    }
+
+    public static boolean isIntercept(String string) {
+        return config.contains(string);
     }
 
     public static boolean isNotLazy(BeanDefinition beanDefinition) {
@@ -33,13 +37,13 @@ public class Config {
                 beanClassName = beanDefinition.getBeanClassName();
                 if (null == beanClassName) {
                     String factoryMethodName = beanDefinition.getFactoryMethodName();
-                    return notLazyBeans.contains(factoryMethodName);
+                    return config.contains(factoryMethodName);
                 } else {
                     if (beanClassName.contains("$$")) {
                         beanClassName = beanClassName.substring(0, beanClassName.indexOf("$"));
                     }
 
-                    return notLazyBeans.contains(beanClassName);
+                    return config.contains(beanClassName);
                 }
             } else {
                 return false;
@@ -50,7 +54,7 @@ public class Config {
                 beanClassName = beanClassName.substring(0, beanClassName.indexOf("$"));
             }
 
-            boolean notLazy = notLazyBeans.contains(beanClassName);
+            boolean notLazy = config.contains(beanClassName);
             return notLazy;
         }
     }
@@ -60,7 +64,7 @@ public class Config {
         InputStream resourceAsStream = null;
         if ("jar".equals(d.getProtocol())) {
             try {
-                JarURLConnection urlConnection = (JarURLConnection)d.openConnection();
+                JarURLConnection urlConnection = (JarURLConnection) d.openConnection();
                 JarFile jarFile = urlConnection.getJarFile();
                 String jarnamepath = jarFile.getName().substring(0, jarFile.getName().lastIndexOf("\\"));
                 System.out.println("jarnamepath:" + jarnamepath);
@@ -75,14 +79,14 @@ public class Config {
 
         try {
             Properties properties = new Properties();
-            properties.load((InputStream)resourceAsStream);
+            properties.load((InputStream) resourceAsStream);
             System.out.println("-----------help-bean-init--------------");
             properties.values().forEach((value) -> {
                 System.out.println(value);
-                notLazyBeans.add((String)value);
+                config.add((String) value);
             });
             System.out.println("-----------help-bean-init--------------");
-            ((InputStream)resourceAsStream).close();
+            ((InputStream) resourceAsStream).close();
         } catch (IOException var5) {
             var5.printStackTrace();
             System.out.println("急速启动器获取配置失败 : " + var5.getMessage());

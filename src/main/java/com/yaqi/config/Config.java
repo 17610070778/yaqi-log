@@ -19,22 +19,22 @@ public class Config {
     private static ArrayList<String> configs = new ArrayList<>();
 
     static {
+        System.out.println("-------------------------开始注入系统-------------------------");
+
         try {
             FileInputStream fileInputStream = new FileInputStream("C:\\help-bean-init.properties");
             Properties properties = new Properties();
             properties.load(fileInputStream);
-            System.out.println("-----------help-bean-init--------------");
             properties.values().forEach((value) -> {
                 System.out.println(value);
                 configs.add((String) value);
             });
-            System.out.println("-----------help-bean-init--------------");
             fileInputStream.close();
         } catch (Exception e) {
             System.out.println("急速启动器获取配置失败 : " + e.getMessage());
             throw new RuntimeException("急速启动器获取配置失败", e);
         }
-
+        System.out.println("-------------------------系统注入完成-------------------------");
     }
 
 

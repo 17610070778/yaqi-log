@@ -23,9 +23,7 @@ public class VeryFastStartUp implements ClassFileTransformer {
 
 
     public static void premain(String options, Instrumentation ins) {
-        System.out.println("-------------------------开始系统注入-------------------------");
         ins.addTransformer(new VeryFastStartUp());
-        System.out.println("-------------------------系统注入完成-------------------------");
     }
 
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {

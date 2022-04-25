@@ -9,6 +9,7 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 import java.util.Date;
+import java.util.UUID;
 
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import static jdk.internal.org.objectweb.asm.Opcodes.INVOKESTATIC;
@@ -71,11 +72,17 @@ public class VeryFastStartUp implements ClassFileTransformer {
                         return new MethodVisitor(ASM5, mv) {
                             @Override
                             public void visitMethodInsn(int i, String s, String s1, String s2, boolean b) {
-                                this.mv.visitTypeInsn(NEW, "java/util/Date");
-                                this.mv.visitInsn(DUP);
-                                this.mv.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(Date.class), "<init>", "()V", false);
-                                this.mv.visitMethodInsn(INVOKEVIRTUAL, Type.getInternalName(Date.class), "getTime", "()J", false);
-                                this.mv.visitMethodInsn(INVOKESTATIC, Type.getInternalName(String.class), "valueOf", "(J)Ljava/lang/String;", false);
+                                // 将生成的UUID的-  替换成""
+                                this.mv.visitLdcInsn("-");
+                                this.mv.visitVarInsn(ASTORE, 100);
+                                this.mv.visitLdcInsn("");
+                                this.mv.visitVarInsn(ASTORE, 101);
+                                this.mv.visitMethodInsn(INVOKESTATIC, Type.getInternalName(UUID.class), "randomUUID", "()Ljava/util/UUID;", false);
+                                this.mv.visitMethodInsn(INVOKEVIRTUAL, Type.getInternalName(UUID.class), "toString", "()Ljava/lang/String;", false);
+
+                                this.mv.visitVarInsn(ALOAD, 100);
+                                this.mv.visitVarInsn(ALOAD, 101);
+                                this.mv.visitMethodInsn(INVOKEVIRTUAL, Type.getInternalName(String.class), "replace", "(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;", false);
                             }
                         };
                     }
